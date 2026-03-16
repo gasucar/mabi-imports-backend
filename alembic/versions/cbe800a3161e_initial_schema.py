@@ -1,8 +1,8 @@
 """initial schema
 
-Revision ID: 7b99652a9a59
+Revision ID: cbe800a3161e
 Revises: 
-Create Date: 2026-03-16 15:51:03.971419
+Create Date: 2026-03-16 17:42:10.074480
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = '7b99652a9a59'
+revision: str = 'cbe800a3161e'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -56,11 +56,11 @@ def upgrade() -> None:
     sa.Column('short_description', sa.String(), nullable=True),
     sa.Column('long_description', sa.Text(), nullable=True),
     sa.Column('price', sa.Float(), nullable=False),
+    sa.Column('stock_quantity', sa.Integer(), nullable=True),
     sa.Column('gender_target', sa.String(), nullable=True),
     sa.Column('intensity', sa.String(), nullable=True),
     sa.Column('season', sa.String(), nullable=True),
     sa.Column('duration_hours', sa.Integer(), nullable=True),
-    sa.Column('stock_quantity', sa.Integer(), nullable=True),
     sa.Column('first_image', sa.String(), nullable=True),
     sa.Column('images', postgresql.ARRAY(sa.String()), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),

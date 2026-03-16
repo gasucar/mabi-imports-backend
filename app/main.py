@@ -1,6 +1,10 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from app.api.routers.perfume_router import router as perfume_router
 from app.api.routers.ai_router import router as ai_router
+
+load_dotenv()
 
 app = FastAPI(
     title="Perfume AI Ecommerce API",

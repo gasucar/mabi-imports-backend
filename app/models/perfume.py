@@ -21,6 +21,8 @@ class Perfume(Base):
     long_description = Column(Text)
 
     price = Column(Float, nullable=False)
+    
+    stock_quantity = Column(Integer, default=0)
 
     gender_target = Column(String)
 

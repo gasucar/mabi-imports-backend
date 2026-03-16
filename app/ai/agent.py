@@ -1,30 +1,34 @@
-from langchain_openai import ChatOpenAI
-from langchain.agents import initialize_agent, AgentType
+from langchain_groq import ChatGroq
+from langgraph.prebuilt import create_react_agent
+from langgraph.checkpoint.memory import MemorySaver
+
 from app.ai.tools import search_perfumes
 from app.ai.prompts import SYSTEM_PROMPT
-import os
 
 
-llm = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0.3,
-    api_key=os.getenv("OPENAI_API_KEY")
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.7
 )
-
 
 tools = [search_perfumes]
 
+memory = MemorySaver()
 
-agent = initialize_agent(
-    tools,
+agent = create_react_agent(
     llm,
-    agent=AgentType.OPENAI_FUNCTIONS,
-    verbose=True,
-    agent_kwargs={
-        "system_message": SYSTEM_PROMPT
-    }
+    tools,
+    checkpointer=memory
 )
 
 
-def run_agent(message: str):
-    return agent.run(message)
+def run_agent(message: str, session_id: str = "default"):
+
+    result = agent.invoke({
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": message}
+        ]
+    }, config={"configurable": {"thread_id": session_id}})
+
+    return result["messages"][-1].content

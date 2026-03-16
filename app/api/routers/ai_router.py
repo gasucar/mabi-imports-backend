@@ -1,7 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from app.ai.agent import run_agent
 
+from app.ai.agent import run_agent
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
@@ -13,8 +13,19 @@ class ChatRequest(BaseModel):
 @router.post("/chat")
 def chat(request: ChatRequest):
 
-    response = run_agent(request.message)
+    try:
 
-    return {
-        "response": response
-    }
+        response = run_agent(request.message)
+
+        return {
+            "response": response
+        }
+
+    except Exception as e:
+
+        print("AI ERROR:", e)
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
