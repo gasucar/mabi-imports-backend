@@ -1,4 +1,45 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Database
+*.sqlite3
+
+# Alembic cache
+alembic/versions/__pycache__/
+
+# Python build
+dist/
+build/
+*.egg-info/
+
+# dotenv
 .env
-.venv
-/venv/
-alembic.ini
+
+# coverage
+.coverage
+htmlcov/
+
+# pytest
+.pytest_cache/
+
+# migrations compiled
+*.pyc
