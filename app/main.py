@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.api.routers.perfume_router import router as perfume_router
 
 app = FastAPI(
     title="Perfume AI Ecommerce API",
@@ -6,7 +7,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-
+app.include_router(perfume_router)
 @app.get("/")
 def root():
     return {"message": "Mabi Backend running"}
