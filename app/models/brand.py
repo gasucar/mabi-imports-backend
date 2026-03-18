@@ -12,3 +12,4 @@ class Brand(Base):
     name = Column(String, nullable=False)
     country = Column(String)
     description = Column(String)
+    image = Column(String)

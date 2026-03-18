@@ -20,9 +20,9 @@ class Perfume(Base):
     short_description = Column(String)
     long_description = Column(Text)
 
-    price = Column(Float, nullable=False)
+    price = Column(String, nullable=False)
     
-    stock_quantity = Column(Integer, default=0)
+    stock_quantity = Column(String, default=0)
 
     gender_target = Column(String)
 
@@ -30,9 +30,7 @@ class Perfume(Base):
 
     season = Column(String)
 
-    duration_hours = Column(Integer)
-
-    stock_quantity = Column(Integer)
+    duration_hours = Column(String)
 
     first_image = Column(String)
 

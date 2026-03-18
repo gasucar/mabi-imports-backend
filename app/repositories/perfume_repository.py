@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.perfume import Perfume
 from uuid import UUID
 
@@ -18,7 +18,7 @@ class PerfumeRepository:
 
 
     def get_all(self, db: Session):
-        return db.query(Perfume).all()
+        return db.query(Perfume).options(joinedload(Perfume.brand)).all()
 
 
     def delete(self, db: Session, perfume_id: UUID):

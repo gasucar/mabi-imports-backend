@@ -2,18 +2,22 @@ from pydantic import BaseModel
 from uuid import UUID
 from typing import Optional
 
+from app.schemas.brand_schema import BrandResponse
+
 
 class PerfumeBase(BaseModel):
     name: str
-    brand_id: UUID
+    brand: Optional[BrandResponse]
     short_description: Optional[str]
     long_description: Optional[str]
-    price: float
+    price: str
     gender_target: Optional[str]
     intensity: Optional[str]
     season: Optional[str]
-    duration_hours: Optional[int]
-    stock_quantity: Optional[int]
+    duration_hours: Optional[str]
+    stock_quantity: Optional[str]
+    first_image: Optional[str]
+    images: Optional[list[str]]
 
 
 class PerfumeCreate(PerfumeBase):

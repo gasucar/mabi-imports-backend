@@ -26,6 +26,7 @@ Thumbs.db
 
 # Alembic cache
 alembic/versions/__pycache__/
+alembic/versions/
 alembic.ini
 
 # Python build
