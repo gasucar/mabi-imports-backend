@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from uuid import UUID
-from typing import Optional
+from typing import List, Optional
 
 from app.schemas.brand_schema import BrandResponse
 
@@ -35,3 +35,9 @@ class PerfumeResponse(PerfumeBase):
 
     class Config:
         from_attributes = True
+        
+class PaginatedPerfumeResponse(BaseModel):
+    data: List[PerfumeResponse]
+    total: int
+    page: int
+    limit: int

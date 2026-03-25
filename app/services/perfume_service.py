@@ -16,8 +16,8 @@ class PerfumeService:
         return self.repository.get_by_id(db, perfume_id)
 
 
-    def list_perfumes(self, db: Session):
-        return self.repository.get_all(db)
+    def list_perfumes(self, db: Session, page: int, limit: int, search: str | None):
+        return self.repository.get_all(db, page, limit, search)
 
 
     def delete_perfume(self, db: Session, perfume_id):
