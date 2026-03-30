@@ -4,7 +4,7 @@ from uuid import UUID
 
 from app.core.database import get_db
 from app.services.perfume_service import PerfumeService
-from app.schemas.perfume_schema import PaginatedPerfumeResponse, PerfumeCreate, PerfumeUpdate, PerfumeResponse
+from app.schemas.perfume_schema import PerfumeCreate, PerfumeUpdate, PerfumeResponse
 
 
 router = APIRouter(prefix="/perfumes", tags=["Perfumes"])
@@ -17,14 +17,31 @@ def create_perfume(perfume: PerfumeCreate, db: Session = Depends(get_db)):
     return service.create_perfume(db, perfume.model_dump())
 
 
-@router.get("/", response_model=PaginatedPerfumeResponse)
+@router.get("/")
 def list_perfumes(
-    db: Session = Depends(get_db),
     page: int = 1,
     limit: int = 9,
-    search: str | None = None,
+    search: str = "",
+    brands: str = "",
+    gender: str = "",
+    season: str = "",
+    intensity: str = "",
+    price_min: float = 0,
+    price_max: float = 999999,
+    db: Session = Depends(get_db)
 ):
-    return service.list_perfumes(db, page, limit, search)
+    return service.list_perfumes(
+        db,
+        page,
+        limit,
+        search,
+        brands,
+        gender,
+        season,
+        intensity,
+        price_min,
+        price_max
+    )
 
 
 @router.get("/{perfume_id}", response_model=PerfumeResponse)
