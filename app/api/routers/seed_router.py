@@ -4,9 +4,9 @@ import uuid
 from fastapi import APIRouter
 from requests import Session
 
-from backend.app.core.database import SessionLocal
-from backend.app.models.brand import Brand
-from backend.app.models.perfume import Perfume
+from app.core.database import SessionLocal
+from app.models.brand import Brand
+from app.models.perfume import Perfume
 
 
 router = APIRouter(prefix="/seed", tags=["seed"])
