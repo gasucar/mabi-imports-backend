@@ -5,7 +5,7 @@ from app.api.routers.perfume_router import router as perfume_router
 from app.api.routers.ai_router import router as ai_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import Base, engine
-from app.api.routers import seed_router
+from app.api.routers.seed_router import router as seed_router
 
 load_dotenv()
 
