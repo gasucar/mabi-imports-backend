@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from app.api.routers.perfume_router import router as perfume_router
 from app.api.routers.ai_router import router as ai_router
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.database import Base, engine
 
 load_dotenv()
 
@@ -12,6 +13,8 @@ app = FastAPI(
     description="Backend for AI-powered perfume recommendation system",
     version="1.0.0"
 )
+
+Base.metadata.create_all(bind=engine)
 
 app.add_middleware(
     CORSMiddleware,
