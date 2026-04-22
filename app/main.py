@@ -5,6 +5,7 @@ from app.api.routers.perfume_router import router as perfume_router
 from app.api.routers.ai_router import router as ai_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import Base, engine
+from app.api.routers import seed_router
 
 load_dotenv()
 
@@ -27,6 +28,7 @@ app.add_middleware(
 
 app.include_router(perfume_router)
 app.include_router(ai_router)
+app.include_router(seed_router)
 @app.get("/")
 def root():
     return {"message": "Mabi Backend running"}
