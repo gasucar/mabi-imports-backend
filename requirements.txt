@@ -18,5 +18,4 @@ python-dotenv==1.2.2
 
 # Utils necesarias
 pydantic==2.12.5
-tenacity==9.1.4
 orjson==3.11.7
