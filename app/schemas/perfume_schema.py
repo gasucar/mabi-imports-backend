@@ -18,6 +18,9 @@ class PerfumeBase(BaseModel):
     stock_quantity: Optional[str]
     first_image: Optional[str]
     images: Optional[list[str]]
+    top: Optional[List[str]]
+    base: Optional[List[str]]
+    heart: Optional[List[str]]
 
 
 class PerfumeCreate(PerfumeBase):
@@ -28,6 +31,9 @@ class PerfumeUpdate(BaseModel):
     name: Optional[str]
     price: Optional[float]
     stock_quantity: Optional[int]
+    top: Optional[List[str]]
+    base: Optional[List[str]]
+    heart: Optional[List[str]]
 
 
 class PerfumeResponse(PerfumeBase):

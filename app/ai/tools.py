@@ -1,6 +1,7 @@
+import os
 from typing import List
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, cast, Integer
 
 from app.models.perfume import Perfume
 from app.core.database import SessionLocal
@@ -15,11 +16,11 @@ def perfume_matches(perfume, query: str) -> bool:
     notes = (perfume.top or []) + (perfume.heart or []) + (perfume.base or [])
     notes_text = " ".join(notes).lower()
     query = query.lower()
-    if "sweet" in query or "dulce" in query:
-        if any(note in notes_text for note in SWEET_NOTES):
-            return True
     if "fresh" in query or "fresco" in query:
         if any(note in notes_text for note in FRESH_NOTES):
+            return True
+    if "sweet" in query or "dulce" in query:
+        if any(note in notes_text for note in SWEET_NOTES):
             return True
     if "woody" in query:
         if any(note in notes_text for note in WOODY_NOTES):
@@ -37,7 +38,7 @@ def serialize_perfume(perfume) -> dict:
         "duration": perfume.duration_hours,
         "intensity": perfume.intensity,
         "first_image": perfume.first_image,
-        "url": f"/perfumes/{perfume.id}"
+        "url": f"{os.getenv('FRONTEND_URL')}/perfumes/{perfume.id}"
     }
 
 # Tool compatible con agente
@@ -47,7 +48,7 @@ def search_perfumes(query: str) -> List[dict]:
     """
     db: Session = SessionLocal()
     try:
-        perfumes = db.execute(select(Perfume).where(Perfume.stock_quantity > 0)).scalars().all()
+        perfumes = db.execute(select(Perfume).where(cast(Perfume.stock_quantity, Integer) > 0)).scalars().all()
         results = [serialize_perfume(p) for p in perfumes if perfume_matches(p, query)]
         return results[:3]  # máximo 3 perfumes
     finally:

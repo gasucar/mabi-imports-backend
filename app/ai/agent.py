@@ -27,51 +27,61 @@ agent = create_agent(
     # checkpointer=memory
 )
 
-def run_agent(message: str, session_id: str = "default"):
-    """
-    Ejecuta el agente con LangGraph / ChatGroq.
-    Garantiza que siempre devuelve texto y maneja errores de tool.
-    """
-    try:
-        # Limitar mensajes para evitar errores de memoria corrupta
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": message}
-        ]
+def detect_language(text: str) -> str:
+    if any(word in text.lower() for word in ["hola", "quiero", "fresco", "dulce", "fragancia"]):
+        return "es"
+    return "en"
 
-        config = {
-            "configurable": {
-                "thread_id": session_id,
-                "checkpoint_ns": ""
-            }
-        }
 
-        print("DEBUG: input enviado al agente:", messages)
-        print("DEBUG: config enviado al agente:", config)
+def format_response(results, lang: str):
 
-        # Llamada al agente
-        result = agent.invoke(input={"messages": messages}, config=config)
-        print("DEBUG: result devuelto por agent.invoke():", result)
-        
+    if not results:
+        return "No encontré perfumes 😔 ¿Querés que busque algo diferente?" if lang == "es" \
+            else "I couldn't find perfumes 😔 Want me to try something else?"
 
-        # Siempre devolver algo legible
-        if isinstance(result, dict) and "messages" in result and len(result["messages"]) > 0:
-            last_msg = result["messages"][-1]
+    intro = "Encontré estos perfumes para vos:\n\n" if lang == "es" \
+        else "Here are some perfumes you might like:\n\n"
 
-            # Si viene con 'content' lo usamos
-            if hasattr(last_msg, "content"):
-                return str(last_msg.content)
+    text = intro
 
-            elif isinstance(last_msg, dict) and "content" in last_msg:
-                return str(last_msg["content"])
-        # fallback en caso de tool
-        if isinstance(last_msg, dict) and last_msg.get("role") == "tool":
-            # simplemente devolver algo seguro
-            return "Lo siento, no pude buscar perfumes ahora. 🌸"
+    emojis = ["🌸", "🔥", "💎"]
 
-        # fallback general
-        return str(result)
+    for i, p in enumerate(results):
+        desc = p["short_description"]
 
-    except Exception as e:
-        print("ERROR ejecutando agente:", e)
-        return "Sorry, something went wrong. Por favor, inténtalo de nuevo."
+        # traducción simple
+        if lang == "es":
+            desc = (
+                desc
+                .replace("sweet", "dulce")
+                .replace("warm", "cálido")
+                .replace("fresh", "fresco")
+                .replace("woody", "maderable")
+                .replace("fragance", "fragancia")
+                
+            )
+
+        text += f"{emojis[i]} {p['name']}\n"
+        text += f"{desc}\n"
+        text += f"{p['url']}\n\n"
+
+    text += "¿Querés algo más?" if lang == "es" else "Want more recommendations?"
+
+    return text
+
+
+def run_agent(message: str):
+
+    lang = detect_language(message)
+
+    # 🔥 lógica de decisión (clave)
+    if any(word in message.lower() for word in ["perfume", "fragancia", "fragrance", "sweet", "dulce", "fresco", "fresh", "woody"]):
+
+        results = search_perfumes(message)
+
+        return format_response(results, lang)
+
+    # fallback conversacional (LLM)
+    response = llm.invoke(message)
+
+    return response.content

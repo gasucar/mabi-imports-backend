@@ -20,7 +20,7 @@ Base.metadata.create_all(bind=engine)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        os.getenv("FRONTEND_URL", "http://localhost:3000")
+        os.getenv("FRONTEND_URL", "http://localhost:5173")
     ],
     allow_methods=["*"],
     allow_headers=["*"],
